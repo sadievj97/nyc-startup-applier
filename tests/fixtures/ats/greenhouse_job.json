@@ -1,0 +1,14 @@
+{
+  "id": 4452703,
+  "title": "Manager, Strategic Partnerships",
+  "first_published": "2026-09-30T09:00:00-04:00",
+  "company_name": "Testco",
+  "include_ai_disclaimer": true,
+  "pay_input_ranges": [
+    {"min_cents": 9000000, "max_cents": 11000000, "currency_type": "USD", "title": "Remote US", "blurb": ""},
+    {"min_cents": 14000000, "max_cents": 17000000, "currency_type": "USD", "title": "New York City", "blurb": "&lt;p&gt;Base salary.&lt;/p&gt;"}
+  ],
+  "questions": [
+    {"required": true, "label": "Resume/CV", "fields": [{"name": "resume", "type": "input_file"}, {"name": "resume_text", "type": "textarea"}]}
+  ]
+}

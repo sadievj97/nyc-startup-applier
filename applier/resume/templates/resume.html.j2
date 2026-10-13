@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>{{ doc.name }} Resume</title>
+<style>
+  @page { size: Letter; margin: {{ doc.margin_in }}in 0.6in; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: #fff; color: #000; }
+  body {
+    font-family: Calibri, Carlito, "Segoe UI", Arial, sans-serif;
+    font-size: {{ doc.font_pt }}pt;
+    line-height: 1.16;
+  }
+  h1 { font-size: 17pt; text-align: center; margin: 0; font-weight: bold; letter-spacing: 0.2pt; }
+  .contact { text-align: center; margin: 1pt 0 2pt; }
+  h2 {
+    font-size: {{ doc.font_pt + 0.5 }}pt; font-weight: bold; text-transform: uppercase;
+    margin: 5pt 0 2pt; padding-bottom: 0.5pt; border-bottom: 0.9pt solid #000;
+  }
+  .summary { margin: 2pt 0 0; }
+  .entry { margin-top: 2.5pt; }
+  .row, .italic, h2 { break-after: avoid; }
+  li { break-inside: avoid; }
+  .row { display: flex; justify-content: space-between; align-items: baseline; gap: 10pt; }
+  .row .left { flex: 1 1 auto; }
+  .row .right { flex: 0 0 auto; white-space: nowrap; font-weight: bold; }
+  .org { font-weight: bold; }
+  .italic { font-style: italic; }
+  ul { margin: 0.5pt 0 0; padding-left: 13pt; }
+  li { margin: 0 0 0.5pt; padding-left: 1pt; }
+  li::marker { font-size: 0.9em; }
+  .label { font-weight: bold; }
+  .draft { text-align: center; font-size: 8pt; color: #b00; margin: 0 0 2pt; }
+  .disputed { background: #fff3a6; }
+</style>
+</head>
+<body>
+  <h1>{{ doc.name }}</h1>
+  <div class="contact">{{ doc.contact_line }}</div>
+  {% if doc.draft_note %}<div class="draft">{{ doc.draft_note }}</div>{% endif %}
+  {% if doc.summary %}<div class="summary">{{ doc.summary }}</div>{% endif %}
+
+  {% for section in doc.sections %}
+  <h2>{{ section.title }}</h2>
+    {% for entry in section.entries %}
+    <div class="entry">
+      {% if entry.heading_left %}
+      <div class="row">
+        <div class="left"><span class="org">{{ entry.heading_left }}</span>{% if entry.heading_rest %}{{ entry.heading_rest }}{% endif %}</div>
+        <div class="right">{{ entry.heading_right }}</div>
+      </div>
+      {% endif %}
+      {% if entry.subtitle %}<div class="italic">{{ entry.subtitle }}</div>{% endif %}
+      {% if entry.bullets %}
+      <ul>
+        {% for bullet in entry.bullets %}
+        <li{% if bullet.disputed %} class="disputed"{% endif %}>{% if bullet.label %}<span class="label">{{ bullet.label }}:</span> {% endif %}{{ bullet.text }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+    </div>
+    {% endfor %}
+  {% endfor %}
+</body>
+</html>

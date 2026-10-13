@@ -1,0 +1,123 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Practice Ashby-style form (tests only)</title>
+<style>._option_._active_ { background: #333; color: #fff; } [role=listbox] { border: 1px solid #999; }</style>
+</head>
+<body>
+<h1>Data Analyst</h1>
+<div class="_section_ _application_">
+  <div data-field-path="_systemfield_name">
+    <label class="_heading_ _required_" for="name">Name</label>
+    <input type="text" id="name">
+  </div>
+  <div data-field-path="_systemfield_email">
+    <label class="_heading_ _required_" for="email">Email</label>
+    <input type="email" id="email">
+  </div>
+  <div data-field-path="_systemfield_resume">
+    <label class="_heading_ _required_" for="resume">Resume</label>
+    <input type="file" id="resume" accept=".pdf,.doc,.docx">
+    <div class="_fileName_"></div>
+  </div>
+  <div data-field-path="q_auth">
+    <label class="_heading_ _required_">Are you legally authorized to work in the United States?</label>
+    <div class="_yesno_"><button type="button" class="_option_">Yes</button><button type="button" class="_option_">No</button>
+      <input type="checkbox" style="display:none"></div>
+  </div>
+  <div data-field-path="q_sponsor">
+    <label class="_heading_ _required_">Will you now or at any point in the future require visa sponsorship?</label>
+    <div class="_yesno_"><button type="button" class="_option_">Yes</button><button type="button" class="_option_">No</button>
+      <input type="checkbox" style="display:none"></div>
+  </div>
+  <div data-field-path="q_onsite">
+    <label class="_heading_ _required_">This role is in office 5 days a week in New York. Are you able to commit to that?</label>
+    <div class="_yesno_"><button type="button" class="_option_">Yes</button><button type="button" class="_option_">No</button>
+      <input type="checkbox" style="display:none"></div>
+  </div>
+  <div data-field-path="q_why">
+    <label class="_heading_" for="why">Why are you interested in this role?</label>
+    <textarea id="why"></textarea>
+  </div>
+  <div data-field-path="q_heard">
+    <label class="_heading_">How did you hear about us?</label>
+    <fieldset>
+      <label><input type="radio" name="heard" value="li"> LinkedIn</label>
+      <label><input type="radio" name="heard" value="web"> Company website</label>
+      <label><input type="radio" name="heard" value="ref"> Referral</label>
+    </fieldset>
+  </div>
+  <div data-field-path="q_office">
+    <label class="_heading_ _required_">Which office location are you applying for?</label>
+    <fieldset>
+      <label><input type="checkbox" value="nyc"> New York</label>
+      <label><input type="checkbox" value="sf"> San Francisco</label>
+    </fieldset>
+  </div>
+  <div data-field-path="q_llm">
+    <label class="_heading_ _required_" for="llm">Are you an LLM?</label>
+    <textarea id="llm"></textarea>
+  </div>
+  <div data-field-path="q_salary">
+    <label class="_heading_" for="salary">What are your compensation expectations?</label>
+    <input type="text" id="salary">
+  </div>
+  <div data-field-path="q_based">
+    <label class="_heading_" for="based">Where are you currently based?</label>
+    <input type="text" id="based" role="combobox" autocomplete="off">
+    <div role="listbox" id="based-list" hidden></div>
+  </div>
+</div>
+<div class="_section_ _eeo_">
+  <h3>Voluntary Self-Identification</h3>
+  <div data-field-path="eeo_gender">
+    <label class="_heading_">Gender</label>
+    <fieldset>
+      <label><input type="radio" name="gender" value="m"> Male</label>
+      <label><input type="radio" name="gender" value="f"> Female</label>
+      <label><input type="radio" name="gender" value="d"> Decline to self-identify</label>
+    </fieldset>
+  </div>
+</div>
+<button type="button" id="submit">Submit Application</button>
+<script>
+  // Yes/No buttons that press like Ashby's and tick the hidden checkbox.
+  document.querySelectorAll('._yesno_').forEach(group => {
+    group.querySelectorAll('button').forEach(button => button.addEventListener('click', () => {
+      group.querySelectorAll('button').forEach(b => b.classList.remove('_active_'));
+      button.classList.add('_active_');
+      group.querySelector('input').checked = button.innerText === 'Yes';
+      window.dispatchEvent(new CustomEvent('answered', {detail: button.innerText}));
+    }));
+  });
+  // A file field shows the attached file's name.
+  document.getElementById('resume').addEventListener('change', e => {
+    document.querySelector('._fileName_').innerText = e.target.files[0] ? e.target.files[0].name : '';
+  });
+  // A dropdown whose options appear only when you type.
+  const places = ['Boston, Virginia, United States', 'Boston, Massachusetts, United States', 'New York, NY, USA', 'London, UK'];
+  const based = document.getElementById('based'), list = document.getElementById('based-list');
+  based.addEventListener('input', () => {
+    const typed = based.value.toLowerCase().split(',')[0];
+    list.innerHTML = '';
+    places.filter(p => p.toLowerCase().includes(typed)).forEach(p => {
+      const option = document.createElement('div');
+      option.setAttribute('role', 'option'); option.innerText = p;
+      option.addEventListener('click', () => { based.value = p; list.hidden = true; });
+      list.appendChild(option);
+    });
+    list.hidden = false;
+  });
+  // Submitting posts to the practice server, then shows a thank-you page.
+  window.submitApplication = () => fetch('/api/non-user-graphql?op=ApiSubmitSingleApplicationFormAction', {
+      method: 'POST', body: JSON.stringify({operationName: 'ApiSubmitSingleApplicationFormAction'})})
+    .then(() => { document.body.innerHTML = '<h1>Thank you for applying!</h1><p>Your application was successfully submitted.</p>'; })
+    .catch(() => { document.body.setAttribute('data-submit-failed', '1'); });
+  document.getElementById('submit').addEventListener('click', () => window.submitApplication());
+  // assisted-mode tests: "you" click Submit a moment after the agent answers the last question.
+  if (location.search.includes('confirm')) {
+    document.querySelectorAll('input[name=gender]').forEach(r => r.addEventListener('change', () =>
+      setTimeout(() => window.submitApplication(), 4000)));
+  }
+</script>
+</body>
+</html>

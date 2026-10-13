@@ -1,0 +1,140 @@
+# What roles to look for. Scoring (Phase 3) reads this file.
+# Starting values from the brief; edit freely.
+
+role_families:
+  strategy_and_operations:
+    - strategy & operations
+    - strategy and operations
+    - strategy and ops
+    - strategic operations
+    - strategy & growth
+    - strategy and growth
+    - growth strategy
+  business_operations:
+    - business operations
+    - bizops
+    - biz ops
+    - operations associate
+    - founding operations
+  chief_of_staff:
+    - chief of staff
+    - founder associate
+    - founder's associate
+    - founders associate
+    - associate to the ceo
+    - special projects
+  strategic_finance:
+    - strategic finance
+    - finance & strategy
+    - fp&a
+  partnerships:
+    - partnerships
+    - strategic partnerships
+  impact_or_policy:
+    - impact
+    - policy
+    - public sector
+    - social impact
+  program_or_project_lead:
+    - program lead
+    - program manager
+    - project lead
+    - project manager
+  ai_operations:
+    - ai operations
+    - ai project lead
+    - ai program
+    - ai strategy
+    - ai deployment
+
+# Seniority. You are below Manager level so far.
+seniority:
+  preferred:           # full score
+    - associate
+    - senior associate
+    - analyst
+    - senior analyst
+    - specialist
+    - fellow
+    - coordinator
+  lower_score:         # still considered, scored lower
+    - manager
+  excluded:            # never considered
+    - senior manager
+    - head of
+    - director
+    - senior director
+    - vice president
+    - vp
+    - principal
+    - chief          # except "chief of staff", which is a role family
+
+# Postings must mention at least one of these (empty list means no requirement).
+must_have_keywords: []
+
+# Postings with these in the title are excluded.
+exclude_title_keywords:
+  - engineer
+  - engineering
+  - developer
+  - software
+  - account executive
+  - sales development
+  - business development representative
+  - sdr
+  - bdr
+  - quota
+  - intern
+
+# Postings whose description says any of these are excluded (quota-carrying sales).
+exclude_description_keywords:
+  - quota-carrying
+  - carry a quota
+  - on-target earnings
+
+# Industries, from your job-search preferences. Preferred ones score higher; excluded ones are skipped.
+industries:
+  preferred:
+    - artificial intelligence
+    - ai
+    - machine learning
+    - foundation models
+    - technology
+    - software
+    - financial services
+    - fintech
+    - healthcare
+    - life sciences
+    - energy
+    - oil and gas
+    - strategy consulting
+    - economic consulting
+  open:
+    - telecommunications
+    - media technology
+    - venture capital
+    - transportation
+    - logistics
+  excluded:
+    - agriculture
+    - agtech
+    - academia
+    - education
+    - edtech
+    - media and publishing
+    - construction
+    - multilateral organizations
+  # Excluded industries that are still fine when the company is a tech startup in them
+  # (its industry also says tech, software, AI or SaaS), e.g. "construction tech AI".
+  allowed_when_tech:
+    - construction
+
+# Base salary floor in US dollars. Postings whose whole range is below it are excluded.
+salary_floor_usd: 0   # your lowest acceptable base salary
+
+# Sponsorship stance. You will need sponsorship in the future, so postings that
+# say the company cannot sponsor are skipped and the reason is logged.
+sponsorship:
+  skip_if_company_cannot_sponsor: true
+  show_lca_history: true        # past H-1B filings from Department of Labor data
+  show_everify_status: true     # STEM OPT extension requires an E-Verify employer

@@ -1,0 +1,64 @@
+# Fake profile used only by tests. Not a real person.
+name:
+  first: Test
+  last: Person
+  full: Test Person
+  preferred_first: Test
+
+contact:
+  email: test.person@example.com
+  phone: "+1 555 010 0000"
+
+location:
+  city: Boston
+  state: MA
+  country: United States
+  display: "Boston, MA"
+
+links:
+  linkedin: "https://www.linkedin.com/in/example"
+
+over_18: true
+
+work_authorization:
+  authorized_to_work_in_us: true
+  status: "Example visa status"
+  description: "Example work authorization note"
+  opt_end_date: 2027-07-28
+  plans_stem_opt_extension: true
+
+sponsorship:
+  requires_now: false
+  requires_in_future: true
+  requires_now_or_in_future: true
+
+start_date:
+  answer: "Two weeks after an offer"
+  notice_weeks: 2
+
+salary:
+  rule: midpoint_of_posted_range
+  expected_min_usd: 140000
+  expected_max_usd: 150000
+  floor_usd: 130000
+
+relocation:
+  willing: true
+  open_to:
+    - "New York, NY"
+
+how_did_you_hear: "Company website"
+
+eeo:
+  gender: "Decline to self-identify"
+  race_ethnicity: "Decline to self-identify"
+  hispanic_latino: "Decline to self-identify"
+  veteran_status: "Decline to self-identify"
+  disability_status: "Decline to self-identify"
+  sexual_orientation: "Decline to self-identify"
+  transgender: "Decline to self-identify"
+  pronouns: "Decline to self-identify"
+
+form_answers:
+  onsite_new_york_5_days: true
+  future_contact_consent: true

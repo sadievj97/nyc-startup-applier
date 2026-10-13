@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Master Resume Review</title>
+<style>
+  :root { --bg:#fbfaf7; --fg:#1d1d1b; --muted:#6b6b66; --line:#e3e0d8; --card:#fff; --accent:#1f5f8b;
+          --ok:#2f7d32; --warn:#9a6700; --warnbg:#fff4cc; --bad:#a1260d; --badbg:#fde7e1; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#161614; --fg:#ecebe6; --muted:#a3a29b; --line:#34332f; --card:#1f1e1c; --accent:#7fb6dc;
+            --ok:#7cc47f; --warn:#e3b341; --warnbg:#3a3112; --bad:#f08a70; --badbg:#3b1d16; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--fg); font: 15px/1.5 "Segoe UI", system-ui, sans-serif; }
+  main { max-width: 980px; margin: 0 auto; padding: 24px 16px 64px; }
+  h1 { font-size: 26px; margin: 0 0 4px; }
+  h2 { font-size: 20px; margin: 36px 0 10px; padding-bottom: 6px; border-bottom: 2px solid var(--line); }
+  h3 { font-size: 17px; margin: 22px 0 6px; }
+  .muted { color: var(--muted); }
+  .stats { display:flex; flex-wrap:wrap; gap:10px; margin:14px 0; }
+  .stat { background:var(--card); border:1px solid var(--line); border-radius:8px; padding:8px 12px; }
+  .stat b { font-size: 18px; display:block; }
+  .q { background:var(--card); border:1px solid var(--line); border-left:4px solid var(--warn); border-radius:8px; padding:10px 14px; margin:10px 0; }
+  .q.done { border-left-color: var(--ok); }
+  .q .num { font-weight:700; color:var(--accent); margin-right:6px; }
+  .q ol { margin:6px 0 0; padding-left: 22px; list-style: lower-alpha; }
+  .q .affected { font-size:13px; color:var(--muted); margin-top:4px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:8px; padding:12px 14px; margin:10px 0; }
+  table.fields { border-collapse: collapse; width:100%; font-size:14px; }
+  table.fields td { padding:3px 8px 3px 0; vertical-align: top; }
+  table.fields td:first-child { color:var(--muted); width:150px; }
+  .pending { background:var(--warnbg); color:var(--warn); border-radius:4px; padding:0 5px; font-size:12px; font-weight:600; }
+  .group { border-top:1px solid var(--line); padding-top:8px; margin-top:8px; }
+  .group-head { display:flex; flex-wrap:wrap; gap:8px; align-items:baseline; }
+  .group-head .label { font-weight:600; }
+  .tag { font-size:12px; color:var(--muted); }
+  .base { font-size:12px; font-weight:600; color:var(--ok); }
+  details summary { cursor:pointer; color:var(--accent); font-size:14px; margin-top:4px; }
+  ul.variants { margin:6px 0 0; padding-left: 0; list-style:none; }
+  ul.variants li { padding:5px 8px; border-radius:6px; margin:3px 0; font-size:14px; }
+  ul.variants li.ok { background: transparent; }
+  ul.variants li.disputed { background: var(--warnbg); }
+  ul.variants li.excluded { background: var(--badbg); text-decoration: line-through; opacity: .8; }
+  .badge { font-size:11px; font-weight:700; text-transform:uppercase; margin-right:6px; }
+  .badge.ok { color: var(--ok); } .badge.disputed { color: var(--warn); } .badge.excluded { color: var(--bad); }
+  .files { font-size:12px; color:var(--muted); margin-left:4px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Master resume review</h1>
+  <div class="muted">Status: <b>{{ master.meta.status }}</b>. Built from {{ master.meta.sources|length }} of your resume files. Every line below is copied word for word from your own resumes.</div>
+  <div class="stats">
+    <div class="stat"><b>{{ stats.groups }}</b>achievement groups</div>
+    <div class="stat"><b>{{ stats.variants }}</b>wordings</div>
+    <div class="stat"><b>{{ stats.disputed }}</b>waiting on your answers</div>
+    <div class="stat"><b>{{ stats.open }}</b>open questions</div>
+  </div>
+
+  <h2>Questions for you</h2>
+  <p class="muted">Wordings tied to an open question are not used until you answer. Reply in the chat with the question number and a letter, for example "4b".</p>
+  {% for c in master.conflicts %}
+  <div class="q{% if c.resolution %} done{% endif %}">
+    <span class="num">{{ loop.index }}.</span>{{ c.question }}
+    <ol>{% for key, opt in c.options.items() %}<li{% if c.resolution == key %} style="font-weight:700"{% endif %}>{{ opt.label }}</li>{% endfor %}</ol>
+    {% if affected[c.id] %}<div class="affected">Affects {{ affected[c.id] }} wording(s).</div>{% endif %}
+    {% if c.resolution %}<div class="affected">Answered: {{ c.resolution }}</div>{% endif %}
+  </div>
+  {% endfor %}
+
+  {% macro group_block(g) %}
+  <div class="group">
+    <div class="group-head">
+      <span class="label">{{ g.label }}</span>
+      {% if g.default %}<span class="base">in base resume</span>{% endif %}
+      <span class="tag">{{ g.tags|join(", ") }}</span>
+    </div>
+    {% set shown = g.variants[:3] %}
+    <ul class="variants">
+      {% for v in shown %}{{ variant_li(v) }}{% endfor %}
+    </ul>
+    {% if g.variants|length > 3 %}
+    <details><summary>{{ g.variants|length - 3 }} more wording(s)</summary>
+      <ul class="variants">{% for v in g.variants[3:] %}{{ variant_li(v) }}{% endfor %}</ul>
+    </details>
+    {% endif %}
+  </div>
+  {% endmacro %}
+
+  {% macro variant_li(v) %}
+  <li class="{{ v.status }}"><span class="badge {{ v.status }}">{{ v.status if v.status != "ok" else "ok" }}{% if v.conflict %} (q{{ qnum[v.conflict] }}){% endif %}</span>{{ v.text }}{% if v.sources and v.sources[0].startswith("stated by you") %}<span class="pending" style="margin-left:6px">NEW: {{ v.sources[0] }}</span>{% else %}<span class="files">in {{ v.sources|length }} file(s)</span>{% endif %}</li>
+  {% endmacro %}
+
+  <h2>Header</h2>
+  <div class="card"><table class="fields">
+    <tr><td>Name</td><td>{{ master.name }}</td></tr>
+    <tr><td>Location shown</td><td>{{ master.location or "None (left off)" }}{% for p in master.pending %}{% if p in open_ids %} <span class="pending">question {{ qnum[p] }}</span>{% endif %}{% endfor %}</td></tr>
+    <tr><td>Email, phone, link</td><td>From profile.yaml</td></tr>
+  </table></div>
+
+  {% if master.summaries %}
+  <h2>Summary lines (not used unless a posting calls for one)</h2>
+  <div class="card">{{ group_block(master.summaries) }}</div>
+  {% endif %}
+
+  <h2>Education</h2>
+  {% for e in master.education %}
+  <div class="card">
+    <h3>{{ e.school }}</h3>
+    <table class="fields">
+      <tr><td>Shown as</td><td>{{ e.school }}{% if e.note %}, {{ e.note }}{% endif %}</td></tr>
+      {% if e.degree %}<tr><td>Degree line</td><td>{{ e.degree }}</td></tr>{% endif %}
+      <tr><td>Place and dates</td><td>{{ e.location }} | {{ e.dates }}</td></tr>
+    </table>
+    {% for g in e.groups %}{{ group_block(g) }}{% endfor %}
+  </div>
+  {% endfor %}
+
+  <h2>Experience</h2>
+  {% for r in master.experience %}
+  <div class="card">
+    <h3>{{ r.organization }}{% if not r.default %} <span class="muted">(not in base resume)</span>{% endif %}</h3>
+    <table class="fields">
+      <tr><td>Organization</td><td>{{ r.organization }}{% if r.organization_alternatives %} <span class="muted">(also: {{ r.organization_alternatives|join("; ") }})</span>{% endif %}</td></tr>
+      {% if r.descriptor %}<tr><td>Description</td><td>({{ r.descriptor }}){% if r.descriptor_alternatives %} <span class="muted">(also: {{ r.descriptor_alternatives|join("; ") }})</span>{% endif %}</td></tr>{% endif %}
+      <tr><td>Title</td><td>{{ r.title }}{% if r.title_alternatives %} <span class="muted">(also: {{ r.title_alternatives|join("; ") }})</span>{% endif %}</td></tr>
+      <tr><td>Place and dates</td><td>{{ r.location }} | {{ r.dates }}</td></tr>
+      {% set waiting = r.pending|select("in", open_ids)|list %}
+      {% if waiting %}<tr><td>Waiting on</td><td>{% for p in waiting %}<span class="pending">question {{ qnum[p] }}</span> {% endfor %}</td></tr>{% endif %}
+      {% if r.may_omit %}<tr><td>Note</td><td class="muted">Can be left out when not relevant to a posting</td></tr>{% endif %}
+    </table>
+    {% for g in r.groups %}{{ group_block(g) }}{% endfor %}
+  </div>
+  {% endfor %}
+
+  <h2>Selected projects and leadership</h2>
+  <div class="card">{% for g in master.leadership %}{{ group_block(g) }}{% endfor %}</div>
+
+  <h2>Skills, languages and interests</h2>
+  <div class="card">{% for g in master.skills %}{{ group_block(g) }}{% endfor %}</div>
+</main>
+</body>
+</html>

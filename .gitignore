@@ -1,0 +1,45 @@
+# Secrets: never commit
+.env
+.env.*
+!.env.example
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Local databases
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite3
+data/
+
+# Claude Code personal settings
+.claude/settings.local.json
+
+# Personal data and Google sign-in files
+profile/
+screenshots/
+packets/
+exports/
+digest/
+logs/
+credentials.json
+client_secret*.json
+token.json
+
+# Personal company lists (the .example.csv versions are committed instead)
+config/applied_before.csv
+config/do_not_apply.csv
+config/company_aliases.csv
+
+# Browser downloaded by Playwright (kept inside this folder)
+.playwright-browsers/
+
+# Kill switch: a local on/off file, never shared
+PAUSE

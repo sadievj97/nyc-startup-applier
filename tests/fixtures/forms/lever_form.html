@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Practice Lever-style form (tests only)</title></head>
+<body>
+<h2>Chief of Staff</h2>
+<form id="application-form" method="POST" action="" enctype="multipart/form-data" novalidate>
+  <div class="section application-form">
+    <h4>Submit your application</h4>
+    <ul>
+      <li class="application-question resume"><label><div class="application-label">Resume/CV <span class="required">&#x2731;</span></div>
+        <div class="application-field"><input type="file" name="resume" id="resume-upload-input"><span class="filename"></span></div></label></li>
+      <li class="application-question"><label><div class="application-label">Full name <span class="required">&#x2731;</span></div>
+        <div class="application-field"><input type="text" name="name" required></div></label></li>
+      <li class="application-question"><label><div class="application-label">Email <span class="required">&#x2731;</span></div>
+        <div class="application-field"><input type="email" name="email" required></div></label></li>
+      <li class="application-question"><label><div class="application-label">Phone <span class="required">&#x2731;</span></div>
+        <div class="application-field"><input type="text" name="phone" required></div></label></li>
+      <li class="application-question"><label><div class="application-label">Current location <span class="required">&#x2731;</span></div>
+        <div class="application-field"><input type="text" name="location" class="location-input" required autocomplete="off">
+          <div class="dropdown-results"></div></div></label></li>
+      <li class="application-question"><label><div class="application-label">Current company</div>
+        <div class="application-field"><input type="text" name="org"></div></label></li>
+      <li class="application-question"><label><div class="application-label">LinkedIn URL <span class="required">&#x2731;</span></div>
+        <div class="application-field"><input type="text" name="urls[LinkedIn]" required></div></label></li>
+      <li class="application-question"><label><div class="application-label">Acme Mobile</div>
+        <div class="application-field"><input type="text" name="urls[Other]"></div></label></li>
+    </ul>
+  </div>
+  <div class="section application-form">
+    <h4>Work Authorization</h4>
+    <ul>
+      <li class="application-question custom-question"><div class="application-label full-width"><div class="text">Are you authorized to work lawfully in Canada for Acme Mobile Inc?<span class="required">&#x2731;</span></div></div>
+        <div class="application-field"><ul>
+          <li><label><input type="radio" name="cards[a1][field0]" value="Yes" required><span>Yes</span></label></li>
+          <li><label><input type="radio" name="cards[a1][field0]" value="No" required><span>No</span></label></li></ul></div></li>
+      <li class="application-question custom-question"><div class="application-label full-width"><div class="text">Are you authorized to work lawfully in the US for Acme Mobile Inc?<span class="required">&#x2731;</span></div></div>
+        <div class="application-field"><ul>
+          <li><label><input type="radio" name="cards[a1][field1]" value="Yes" required><span>Yes</span></label></li>
+          <li><label><input type="radio" name="cards[a1][field1]" value="No" required><span>No</span></label></li></ul></div></li>
+      <li class="application-question custom-question"><div class="application-label full-width"><div class="text">What are your salary expectations for this role?<span class="required">&#x2731;</span></div></div>
+        <div class="application-field"><textarea name="cards[b2][field0]" required></textarea></div></li>
+    </ul>
+  </div>
+  <div class="section application-form">
+    <h4>U.S. Equal Employment Opportunity information (Completion is voluntary)</h4>
+    <ul>
+      <li class="application-question"><label><div class="application-label">Gender</div>
+        <div class="application-dropdown"><select name="eeo[gender]"><option value="">Select ...</option><option>Male</option><option>Female</option><option>Decline to self-identify</option></select></div></label></li>
+    </ul>
+  </div>
+  <button type="button" id="btn-submit">SUBMIT APPLICATION</button>
+</form>
+<script>
+  // Place search like Lever's: suggestions appear while you type.
+  const place = document.querySelector('.location-input'), results = document.querySelector('.dropdown-results');
+  place.addEventListener('input', () => {
+    results.innerHTML = '';
+    ['Boston, MA, USA', 'Bostonia, CA, USA'].filter(p => p.toLowerCase().startsWith(place.value.toLowerCase().slice(0, 4))).forEach(p => {
+      const d = document.createElement('div'); d.className = 'dropdown-location'; d.innerText = p;
+      d.addEventListener('click', () => { place.value = p; results.innerHTML = ''; });
+      results.appendChild(d);
+    });
+  });
+  document.querySelector('[name=resume]').addEventListener('change', e => {
+    document.querySelector('.filename').innerText = e.target.files[0] ? e.target.files[0].name : '';
+  });
+  if (location.search.includes('clean')) document.querySelector('[name="cards[a1][field0]"]').closest('.application-question').remove();
+  // Like Lever, the button submits the form to the apply page itself.
+  document.getElementById('btn-submit').addEventListener('click', () => document.getElementById('application-form').requestSubmit());
+</script>
+</body>
+</html>

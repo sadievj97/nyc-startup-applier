@@ -1,0 +1,51 @@
+{
+  "apiVersion": "1",
+  "jobs": [
+    {
+      "id": "a1",
+      "title": "Founding Strategy & Ops",
+      "location": "New York City",
+      "secondaryLocations": [],
+      "department": "Operations",
+      "team": "Strategy",
+      "isListed": true,
+      "isRemote": false,
+      "workplaceType": "OnSite",
+      "descriptionHtml": "<p>At Testco we build things.</p><ul><li>1+ years of experience in strategy or operations</li><li>Excel and pricing work</li></ul>",
+      "descriptionPlain": "At Testco we build things.\n- 1+ years of experience in strategy or operations\n- Excel and pricing work",
+      "publishedAt": "2026-10-01T12:00:00.000Z",
+      "employmentType": "FullTime",
+      "address": {"postalAddress": {"addressLocality": "New York", "addressRegion": "NY", "addressCountry": "USA"}},
+      "jobUrl": "https://jobs.ashbyhq.com/testco/a1",
+      "applyUrl": "https://jobs.ashbyhq.com/testco/a1/application",
+      "compensation": {
+        "compensationTierSummary": "$120K - $160K",
+        "summaryComponents": [
+          {"compensationType": "Salary", "interval": "1 YEAR", "currencyCode": "USD", "minValue": 120000, "maxValue": 160000},
+          {"compensationType": "EquityPercentage", "interval": "NONE", "currencyCode": null, "minValue": 0.1, "maxValue": 0.2}
+        ]
+      }
+    },
+    {
+      "id": "a2",
+      "title": "Hidden Role",
+      "location": "New York City",
+      "isListed": false,
+      "workplaceType": "OnSite",
+      "descriptionPlain": "Unlisted.",
+      "jobUrl": "https://jobs.ashbyhq.com/testco/a2"
+    },
+    {
+      "id": "a3",
+      "title": "Chief of Staff",
+      "location": "Remote (US)",
+      "secondaryLocations": [{"location": "New York City", "address": {"addressLocality": "New York", "addressRegion": "NY"}}],
+      "isListed": true,
+      "isRemote": true,
+      "workplaceType": "Remote",
+      "descriptionPlain": "Work from anywhere in the US.",
+      "employmentType": "FullTime",
+      "jobUrl": "https://jobs.ashbyhq.com/testco/a3"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+[project]
+name = "nyc-startup-applier"
+version = "0.1.0"
+description = "Personal job-application agent for New York startups"
+requires-python = ">=3.12"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-q"

@@ -1,0 +1,16 @@
+# Python add-ons for the applier. They install into .venv inside this folder.
+anthropic>=0.70
+httpx>=0.28
+pydantic>=2.11
+PyYAML>=6.0.2
+Jinja2>=3.1
+playwright>=1.55
+python-dotenv>=1.1
+tzdata>=2025.2
+openpyxl>=3.1
+pytest>=8.4
+pypdf>=5.0
+python-docx>=1.1
+google-api-python-client>=2.150
+google-auth-oauthlib>=1.2
+flask>=3.1

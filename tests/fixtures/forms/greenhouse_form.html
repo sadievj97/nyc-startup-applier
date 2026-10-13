@@ -1,0 +1,79 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Practice Greenhouse-style form (tests only)</title>
+<style>.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.select__menu { border: 1px solid #999; }</style>
+</head>
+<body>
+<h1>Strategic Partnerships</h1>
+<form id="application-form" class="application--form" method="get" action="">
+  <div class="input-wrapper"><label id="first_name-label" for="first_name" class="label">First Name<span>*</span></label>
+    <input id="first_name" type="text" required></div>
+  <div class="input-wrapper"><label for="last_name" class="label">Last Name<span>*</span></label>
+    <input id="last_name" type="text" required></div>
+  <div class="input-wrapper"><label for="email" class="label">Email<span>*</span></label>
+    <input id="email" type="text" required></div>
+  <fieldset class="phone-input"><legend class="visually-hidden">Phone</legend>
+    <div class="select__container"><label for="country" class="label select__label">Country<span>*</span></label>
+      <div class="select-shell" data-options="United States Minor Outlying Islands +1|United States +1|Uruguay +598">
+        <input id="country" role="combobox" type="text" required autocomplete="off">
+        <div class="select__single-value"></div><div class="select__menu" hidden></div></div></div>
+    <div class="input-wrapper"><label for="phone" class="label">Phone<span>*</span></label>
+      <input id="phone" type="tel" required></div>
+  </fieldset>
+  <div class="file-upload"><div id="upload-label-resume" class="label upload-label">Resume/CV<span>*</span></div>
+    <button type="button">Attach</button><label for="resume" class="visually-hidden">Attach</label>
+    <input type="file" id="resume" class="visually-hidden"><span class="file-name"></span>
+    <label for="resume_text" class="visually-hidden">Enter manually</label><textarea id="resume_text" style="display:none"></textarea></div>
+  <div class="file-upload"><div id="upload-label-cover_letter" class="label upload-label">Cover Letter</div>
+    <label for="cover_letter" class="visually-hidden">Attach</label><input type="file" id="cover_letter" class="visually-hidden"></div>
+  <div class="select__container"><label for="question_1" class="label select__label">This role is based in NYC. Are you currently based in NYC or the NYC Metro Area and willing to come in to the office at least 3 to 4 days a week?<span>*</span></label>
+    <div class="select-shell" data-options="Yes|No"><input id="question_1" role="combobox" type="text" required autocomplete="off">
+      <div class="select__single-value"></div><div class="select__menu" hidden></div></div></div>
+  <div class="input-wrapper"><label for="question_2" class="label">LinkedIn Profile<span>*</span></label>
+    <input id="question_2" type="text" required></div>
+  <div class="select__container"><label for="question_3" class="label select__label">Are you legally authorized to work in the US?<span>*</span></label>
+    <div class="select-shell" data-options="Yes|No"><input id="question_3" role="combobox" type="text" required autocomplete="off">
+      <div class="select__single-value"></div><div class="select__menu" hidden></div></div></div>
+  <div class="select__container"><label for="question_4" class="label select__label">Will you now or in the future require sponsorship?<span>*</span></label>
+    <div class="select-shell" data-options="Yes|No"><input id="question_4" role="combobox" type="text" required autocomplete="off">
+      <div class="select__single-value"></div><div class="select__menu" hidden></div></div></div>
+  <div id="demographic-questions"><h3>Voluntary Self-Identification</h3>
+    <div class="select__container"><label for="gender" class="label select__label">Gender</label>
+      <div class="select-shell" data-options="Male|Female|Decline To Self Identify"><input id="gender" role="combobox" type="text" autocomplete="off">
+        <div class="select__single-value"></div><div class="select__menu" hidden></div></div></div>
+  </div>
+  <button type="button" id="submit" class="btn btn--pill">Submit application</button>
+</form>
+<script>
+  // Dropdowns like Greenhouse's: options appear on click or typing; the choice shows as text.
+  document.querySelectorAll('.select-shell').forEach(shell => {
+    const input = shell.querySelector('input'), menu = shell.querySelector('.select__menu'), shown = shell.querySelector('.select__single-value');
+    const all = shell.dataset.options.split('|');
+    const open = () => {
+      document.querySelectorAll('.select__menu').forEach(m => { m.hidden = true; m.innerHTML = ''; });
+      const typed = input.value.toLowerCase();
+      all.filter(o => o.toLowerCase().includes(typed)).forEach(o => {
+        const option = document.createElement('div');
+        option.setAttribute('role', 'option'); option.className = 'select__option'; option.innerText = o;
+        option.addEventListener('click', () => { shown.innerText = o; input.value = ''; menu.hidden = true; menu.innerHTML = ''; });
+        menu.appendChild(option);
+      });
+      menu.hidden = false;
+    };
+    input.addEventListener('click', open);
+    input.addEventListener('input', open);
+    input.addEventListener('keydown', e => { if (e.key === 'Escape') { menu.hidden = true; menu.innerHTML = ''; } });
+  });
+  document.getElementById('resume').addEventListener('change', e => {
+    document.querySelector('.file-name').innerText = e.target.files[0] ? e.target.files[0].name : '';
+  });
+  if (location.search.includes('clean')) document.getElementById('question_1').closest('.select__container').remove();
+  // Like Greenhouse, the page sends the application to the posting's own address.
+  document.getElementById('submit').addEventListener('click', () => location.search.includes('silent') ? null :
+    fetch(location.pathname, {method: 'POST', body: 'application'})
+      .then(() => { document.body.innerHTML = '<h1>Thank you for applying.</h1>'; })
+      .catch(() => document.body.setAttribute('data-submit-failed', '1')));
+</script>
+</body>
+</html>

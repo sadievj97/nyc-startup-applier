@@ -1,0 +1,89 @@
+# Main settings for the NYC startup applier.
+# Edit in Notepad, save, and the next run uses the new values.
+# Run ".venv/Scripts/python -m applier status" afterwards to check the file is still valid.
+
+# Master on/off switch. false means nothing is ever submitted.
+# (Creating a file named PAUSE in the project folder does the same thing.)
+enabled: true
+
+# dry_run: fill forms and take screenshots, never click Submit.
+# review:  prepare everything, then wait for your approval.
+# auto:    submit without waiting (still bound by every rule).
+mode: dry_run
+
+# The first N applications always need your approval, even in auto mode.
+review_first_n: 10
+
+# Pace limits (New York time). Times must stay in quotes.
+max_applications_per_day: 5
+submit_window:
+  start: "08:00"
+  end: "20:00"
+  timezone: America/New_York
+
+# Ashby forms: "assisted" fills the form and you click Submit yourself.
+ashby_submit: assisted
+
+# A posting counts as new if first seen within this many days.
+new_window_days: 7
+
+# Scores run from 0 to 100.
+min_score: 70             # lowest score worth applying to
+highlight_min_score: 80   # strong new role at a company you already applied to
+watch_keywords: []        # e.g. ["chief of staff"]: always highlight these at watched companies
+
+# Locations: New York City onsite or hybrid. true also allows fully remote US roles.
+allow_remote_us: false
+
+# What counts as a startup.
+startup_filter:
+  private_only: true
+  founded_after: 2014     # keeps companies founded in 2015 or later
+  max_headcount: 500      # fewer than this many employees
+  keep_when_uncertain: true   # keep the company and flag it, rather than guess
+
+# Cover letters: when_required (only if the form needs one) or always.
+cover_letter: when_required
+allow_two_pages: false
+
+# Forms. You see every filled form before anything is submitted.
+tick_privacy_consent: true      # tick "I agree to the privacy notice / data processing" boxes
+write_optional_essays: true     # answer optional essay questions (fact-checked like everything else)
+
+# Claude API spending limit per day, in US dollars. Model calls stop when reached.
+daily_budget_usd: 5.0
+# One-day limits (New York date: dollars). Other days use daily_budget_usd.
+budget_overrides: {}
+
+# Claude models used for each job. Prices per million tokens (input/output):
+# Opus 5.5 $4/$20, Sonnet 5.5 $2/$10, Haiku 5.5 $0.10/$0.50. Web searches cost $10 per 1,000.
+models:
+  tailoring: claude-sonnet-5-5        # named in your brief
+  form_mapping: claude-sonnet-5-5     # named in your brief
+  fact_check: claude-opus-5-5         # not named in the brief: the most capable default
+  research: claude-opus-5-5           # company facts and funding news (web search); claude-sonnet-5-5 halves the cost
+  email_classification: claude-haiku-5-5   # named in your brief
+  networking: claude-sonnet-5-5       # finding people and drafting outreach notes (web search)
+
+# Folders whose subfolders are companies you will never be applied to.
+# Re-read on every run, so a new folder blocks that company right away.
+do_not_apply_folders:
+  - "C:/path/to/your/Jobs"
+# Subfolders that are not companies. Folders starting with a number and a dot
+# (like "0. Resume") are always ignored.
+do_not_apply_folder_ignore:
+  - "Claude Applications"   # the agent's own per-application folders (applications_folder below)
+# Still watch these companies for standout roles to highlight (never apply).
+jobs_folder_highlight: true
+
+# Your copy of every application: one folder per job (resume, answers, screenshots, confirmation,
+# job description) plus applications.csv. The do-not-apply list above skips this folder.
+applications_folder: "C:/path/to/your/Jobs/Claude Applications"
+
+# Daily schedule (New York time), used in Phase 7.
+schedule:
+  digest: "07:30"
+  daily_run: "08:15"
+
+# Where the tracking database lives (inside this folder, never in git).
+database_path: data/applier.db

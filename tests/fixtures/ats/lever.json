@@ -1,0 +1,26 @@
+[
+  {
+    "id": "l1",
+    "text": "Business Operations Associate",
+    "categories": {"location": "New York, NY", "team": "Ops", "department": "Operations", "commitment": "Full-time", "allLocations": ["New York, NY", "Boston, MA"]},
+    "country": "US",
+    "createdAt": 1790000000000,
+    "hostedUrl": "https://jobs.lever.co/testco/l1",
+    "applyUrl": "https://jobs.lever.co/testco/l1/apply",
+    "descriptionPlain": "Testco is growing.",
+    "description": "<div>Testco is growing.</div>",
+    "lists": [{"text": "Requirements", "content": "<li>3-5 years of experience in operations</li><li>Comfort with Excel</li>"}],
+    "additionalPlain": "Please do not use AI tools to write your application answers.",
+    "additional": "<div>Please do not use AI tools to write your application answers.</div>",
+    "workplaceType": "hybrid",
+    "salaryRange": {"currency": "USD", "interval": "per-year-salary", "min": 110000, "max": 140000}
+  },
+  {
+    "id": "l2",
+    "text": "Operations Intern",
+    "categories": {"location": "New York, NY", "commitment": "Internship"},
+    "hostedUrl": "https://jobs.lever.co/testco/l2",
+    "descriptionPlain": "Summer internship.",
+    "workplaceType": "on-site"
+  }
+]

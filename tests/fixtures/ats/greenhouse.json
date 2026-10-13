@@ -1,0 +1,19 @@
+{
+  "jobs": [
+    {
+      "id": 4452703,
+      "internal_job_id": 1,
+      "title": "Manager, Strategic Partnerships",
+      "updated_at": "2026-10-02T10:00:00-04:00",
+      "requisition_id": "R1",
+      "location": {"name": "New York, NY"},
+      "absolute_url": "https://job-boards.greenhouse.io/testco/jobs/4452703",
+      "language": "en",
+      "metadata": [{"id": 1, "name": "Workplace Type", "value": "Hybrid", "value_type": "single_select"}],
+      "content": "&lt;p&gt;Testco partners with banks.&lt;/p&gt;&lt;p&gt;We are unable to sponsor visas for this role.&lt;/p&gt;",
+      "departments": [{"id": 1, "name": "Partnerships"}],
+      "offices": [{"id": 2, "name": "New York", "location": "New York, NY"}]
+    }
+  ],
+  "meta": {"total": 1}
+}
